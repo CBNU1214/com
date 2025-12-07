@@ -5,10 +5,10 @@
 
 #define BUF_LEN 128
 
-// [수정] 128x128 이미지 크기 정의
-#define IMG_WIDTH 128
-#define IMG_HEIGHT 128
-#define TOTAL_PIXELS (IMG_WIDTH * IMG_HEIGHT) // 16,384 픽셀
+// [수정] 8x8 이미지 크기 정의
+#define IMG_WIDTH 8
+#define IMG_HEIGHT 8
+#define TOTAL_PIXELS (IMG_WIDTH * IMG_HEIGHT) // 64 픽셀
 
 typedef void (*entry_t)(void);
 
@@ -54,7 +54,8 @@ int main(void)
         *(addr_weight + i) = kernel[i];
     }
 
-    uwrite_int8s("Starting 128x128 2D Convolution...\r\n");
+    // [수정] 메시지를 8x8로 변경
+    uwrite_int8s("Starting 8x8 2D Convolution...\r\n");
 
     // [4] 이미지 스트리밍 루프
     for(i = 0; i < TOTAL_PIXELS; i++)
@@ -68,17 +69,15 @@ int main(void)
         // 결과 읽기 (읽기)
         val_out = *addr_dout;
 
-        // [로그 출력 조절] 
-        // 16,384개를 다 찍으면 너무 느리므로, 처음 20개와 이후 1000개 단위로만 출력
-        if (i < 20 || i % 1000 == 0) {
-            uwrite_int8s("idx: ");
-            uwrite_int8s(uint32_to_ascii_hex(i, buffer, BUF_LEN));
-            uwrite_int8s(" | In: ");
-            uwrite_int8s(uint32_to_ascii_hex(val_in, buffer, BUF_LEN));
-            uwrite_int8s(" -> Out: ");
-            uwrite_int8s(uint32_to_ascii_hex(val_out, buffer, BUF_LEN));
-            uwrite_int8s("\r\n");
-        }
+        // [수정] 조건문(if) 제거: 모든 픽셀(0~63)의 결과를 전부 출력
+        // 64개밖에 안 되므로 Tera Term에서 한눈에 전체 흐름(지연 포함) 확인 가능
+        uwrite_int8s("idx: ");
+        uwrite_int8s(uint32_to_ascii_hex(i, buffer, BUF_LEN));
+        uwrite_int8s(" | In: ");
+        uwrite_int8s(uint32_to_ascii_hex(val_in, buffer, BUF_LEN));
+        uwrite_int8s(" -> Out: ");
+        uwrite_int8s(uint32_to_ascii_hex(val_out, buffer, BUF_LEN));
+        uwrite_int8s("\r\n");
     }
 
     counter2 = CYCLE_COUNTER;
