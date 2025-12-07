@@ -8,9 +8,9 @@ module simple_acc (
     output wire [31:0]  dout    // Data output (Convolution Result)
 );
 
-    // [수정] 이미지 너비를 128로 설정 (128x128 이미지 처리용)
+    // [수정] 이미지 너비를 8로 설정 (8x8 이미지 처리용)
     // 이 파라미터에 따라 내부 시프트 레지스터(Line Buffer) 크기가 자동으로 결정됩니다.
-    parameter IMG_WIDTH = 128;
+    parameter IMG_WIDTH = 8;
     
     // 3x3 필터를 위해 필요한 버퍼 크기: 2줄 + 3픽셀
     localparam SR_DEPTH = (2 * IMG_WIDTH) + 3;
