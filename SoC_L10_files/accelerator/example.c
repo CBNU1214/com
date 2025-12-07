@@ -58,7 +58,7 @@ int main(void)
     uwrite_int8s("Starting 8x8 2D Convolution...\r\n");
 
     // [4] 이미지 스트리밍 루프
-    for(i = 0; i < TOTAL_PIXELS; i++)
+    for(i = 0; i < TOTAL_PIXELS + 10; i++)
     {
         // 테스트 데이터 생성: 0, 1, 2... 255 반복 패턴
         val_in = i % 256; 
